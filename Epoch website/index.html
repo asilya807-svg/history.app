@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Epoch — Learn Your History</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@400;600;700&display=swap');
+:root{
+  --cream:#FFF8ED;--paper:#FEF3DC;--ink:#2D1B00;
+  --pink:#FF6B9D;--yellow:#FFD93D;--blue:#4ECDC4;
+  --green:#6BCB77;--purple:#9B59B6;--orange:#FF8C42;--red:#E74C3C;
+  --fd:'Fredoka One',cursive;--fb:'Nunito',sans-serif;--fh:'Caveat',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--fb);background:var(--cream);color:var(--ink);overflow-x:hidden;}
+/* PAGE SYSTEM */
+.page{display:none;min-height:100vh;animation:fadeIn .35s ease both;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-14px) rotate(5deg)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes pulse{0%,100%{box-shadow:4px 4px 0 var(--ink)}50%{box-shadow:4px 4px 0 var(--ink),0 0 22px rgba(255,107,157,.5)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes nodePulse{0%,100%{box-shadow:5px 5px 0 var(--ink)}50%{box-shadow:5px 5px 0 var(--ink),0 0 24px rgba(255,217,61,.6)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:none}}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:var(--cream);border-bottom:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);transition:padding .3s;}
+.navbar.scrolled{padding:8px 40px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-icon{font-size:30px;animation:spinSlow 8s linear infinite;display:inline-block;}
+.logo-text{font-family:var(--fd);font-size:26px;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;align-items:center;gap:14px;}
+.nav-link{font-weight:700;color:var(--ink);text-decoration:none;padding:6px 12px;border-radius:8px;transition:background .2s;cursor:pointer;}
+.nav-link:hover{background:var(--yellow);}
+.btn-primary{background:var(--pink);color:#fff;border:3px solid var(--ink);border-radius:12px;padding:10px 22px;font-family:var(--fb);font-weight:800;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:4px 4px 0 var(--ink);transition:all .15s;}
+.btn-primary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:#ff4d8d;}
+.btn-primary:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink);}
+.btn-secondary{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:10px 22px;font-family:var(--fb);font-weight:800;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block;box-shadow:4px 4px 0 var(--ink);transition:all .15s;}
+.btn-secondary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:var(--yellow);}
+.pulse-btn{animation:pulse 2s infinite;}
+.hamburger{display:none;font-size:22px;background:none;border:2px solid var(--ink);border-radius:8px;padding:4px 10px;cursor:pointer;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:60px;padding:120px 60px 60px;position:relative;overflow:hidden;background:var(--cream);}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(45,27,0,.05) 28px,rgba(45,27,0,.05) 29px);pointer-events:none;}
+.sticker{position:absolute;font-size:40px;animation:float 4s ease-in-out infinite;cursor:pointer;user-select:none;filter:drop-shadow(2px 4px 6px rgba(0,0,0,.2));transition:transform .2s;}
+.sticker:nth-child(odd){animation-delay:-2s;}
+.hero-content{flex:1;max-width:560px;z-index:1;}
+.tape{display:inline-block;padding:4px 16px;font-family:var(--fh);font-size:18px;font-weight:600;border:2px solid var(--ink);transform:rotate(-2deg);margin-bottom:20px;}
+.tape-yellow{background:var(--yellow);}
+.tape-pink{background:var(--pink);color:#fff;}
+.tape-blue{background:var(--blue);}
+.tape-green{background:var(--green);}
+.hero-title{font-family:var(--fd);font-size:clamp(40px,6vw,70px);line-height:1.1;margin-bottom:20px;}
+.accent-underline{position:relative;display:inline-block;}
+.accent-underline::after{content:'';position:absolute;left:0;bottom:4px;width:100%;height:8px;background:var(--yellow);z-index:-1;border-radius:4px;}
+.hero-sub{font-size:17px;line-height:1.7;margin-bottom:32px;color:#5a3e1b;}
+.hero-cta{margin-bottom:28px;}
+.btn-big{font-size:20px;padding:16px 36px;background:var(--orange);color:#fff;border:3px solid var(--ink);border-radius:16px;font-family:var(--fb);font-weight:900;cursor:pointer;display:inline-block;box-shadow:6px 6px 0 var(--ink);transition:all .15s;animation:bounce 2s ease-in-out infinite;}
+.btn-big:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink);animation:none;}
+.hero-note{margin-top:10px;font-size:16px;color:#8a6a3a;font-family:var(--fh);}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+.badge{background:#fff;border:2px solid var(--ink);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:700;box-shadow:3px 3px 0 var(--ink);transition:transform .2s;cursor:default;}
+.badge:hover{transform:rotate(-4deg) scale(1.08);}
+.scrapbook-preview{position:relative;width:300px;height:340px;flex-shrink:0;}
+.book-page{position:absolute;width:220px;height:280px;background:#fff;border:3px solid var(--ink);border-radius:4px;padding:20px;box-shadow:6px 6px 0 var(--ink);transition:transform .4s cubic-bezier(.34,1.56,.64,1);}
+.page1{top:0;left:0;transform:rotate(-6deg);z-index:3;}
+.page2{top:20px;left:40px;transform:rotate(2deg);z-index:2;background:#FFF0F5;}
+.page3{top:40px;left:80px;transform:rotate(8deg);z-index:1;background:#F0FAFF;}
+.page-stamp{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--red);border:2px dashed var(--red);padding:4px 8px;display:inline-block;margin-bottom:10px;transform:rotate(-3deg);}
+.page-line{height:2px;background:#ddd;margin:7px 0;border-radius:1px;}
+.page-line.short{width:60%;}
+.page-photo{font-size:60px;text-align:center;margin-top:12px;animation:float 3s ease-in-out infinite;}
+
+/* MARQUEE */
+.marquee-section{background:var(--ink);color:#fff;padding:16px 0;overflow:hidden;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);}
+.marquee-track{display:flex;gap:48px;white-space:nowrap;animation:marquee 22s linear infinite;font-weight:700;font-size:15px;}
+.marquee-track:hover{animation-play-state:paused;}
+.marquee-track span{flex-shrink:0;}
+
+/* ABOUT */
+.about-section{padding:80px 60px;text-align:center;}
+.section-tape{display:inline-block;padding:8px 24px;font-family:var(--fd);font-size:24px;border:3px solid var(--ink);transform:rotate(-1deg);margin-bottom:48px;box-shadow:5px 5px 0 var(--ink);}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:28px;max-width:960px;margin:0 auto;}
+.about-card{background:#fff;border:3px solid var(--ink);border-radius:16px;padding:32px 24px;box-shadow:6px 6px 0 var(--ink);transition:all .2s;}
+.about-card:hover{transform:translate(-4px,-4px);box-shadow:10px 10px 0 var(--ink);}
+.card-icon{font-size:46px;margin-bottom:14px;}
+.about-card h3{font-family:var(--fd);font-size:19px;margin-bottom:8px;}
+.about-card p{font-size:14px;line-height:1.6;color:#5a3e1b;}
+
+/* HOW IT WORKS */
+.how-section{padding:80px 60px;background:var(--paper);text-align:center;}
+.steps-path{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;max-width:980px;margin:0 auto;}
+.step-node{display:flex;flex-direction:column;align-items:center;gap:8px;width:110px;}
+.node-icon{width:60px;height:60px;background:#fff;border:3px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:4px 4px 0 var(--ink);transition:all .2s;cursor:default;}
+.step-node:hover .node-icon{transform:scale(1.15);}
+.active-node .node-icon{background:var(--yellow);}
+.locked-node .node-icon{background:#eee;}
+.node-label{font-size:11px;font-weight:700;text-align:center;color:#5a3e1b;}
+.path-line{flex:1;min-width:24px;height:4px;background:repeating-linear-gradient(90deg,var(--ink) 0,var(--ink) 8px,transparent 8px,transparent 16px);margin-bottom:28px;}
+
+/* PRICING */
+.pricing-section{padding:80px 60px;text-align:center;}
+.pricing-grid{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
+.price-card{background:#fff;border:3px solid var(--ink);border-radius:20px;padding:36px 32px;min-width:270px;box-shadow:8px 8px 0 var(--ink);position:relative;transition:all .2s;}
+.price-card:hover{transform:translate(-4px,-4px);box-shadow:12px 12px 0 var(--ink);}
+.premium-card{background:linear-gradient(135deg,#FFF0F5,#F0F5FF);}
+.price-badge{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--yellow);border:3px solid var(--ink);border-radius:20px;padding:4px 18px;font-weight:800;font-size:14px;white-space:nowrap;}
+.price-icon{font-size:46px;margin-bottom:12px;}
+.price-card h3{font-family:var(--fd);font-size:22px;margin-bottom:18px;}
+.price-card ul{list-style:none;margin-bottom:22px;}
+.price-card li{padding:6px 0;font-size:14px;font-weight:600;border-bottom:1px dashed #ddd;}
+.price-tag{font-family:var(--fh);font-size:19px;color:var(--purple);margin-bottom:18px;font-weight:700;}
+
+/* FOOTER */
+footer{background:var(--ink);color:#fff;text-align:center;padding:40px;}
+.footer-logo{font-family:var(--fd);font-size:30px;margin-bottom:8px;color:var(--yellow);}
+footer a{color:var(--blue);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+/* ─── AUTH PAGES ─── */
+.auth-body-inner{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;background:var(--cream);}
+.auth-body-inner::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(45,27,0,.04) 28px,rgba(45,27,0,.04) 29px);pointer-events:none;z-index:0;}
+.auth-sticker{position:fixed;font-size:48px;animation:float 4s ease-in-out infinite;pointer-events:none;filter:drop-shadow(2px 4px 8px rgba(0,0,0,.2));z-index:1;}
+.auth-wrapper{width:100%;max-width:480px;position:relative;z-index:2;}
+.auth-card{background:#fff;border:3px solid var(--ink);border-radius:24px;padding:40px 36px;box-shadow:8px 8px 0 var(--ink);animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) both;}
+.back-link{display:inline-block;margin-bottom:16px;color:var(--orange);text-decoration:none;font-weight:700;font-size:14px;cursor:pointer;}
+.back-link:hover{text-decoration:underline;}
+.auth-logo{font-family:var(--fd);font-size:26px;margin-bottom:6px;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.auth-title{font-family:var(--fd);font-size:28px;margin-bottom:6px;}
+.auth-sub{color:#8a6a3a;font-size:14px;margin-bottom:26px;}
+.signup-steps{display:flex;align-items:center;margin-bottom:28px;}
+.sig-step{width:34px;height:34px;border:3px solid #ddd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#aaa;transition:all .3s;flex-shrink:0;}
+.sig-step.active{border-color:var(--pink);background:var(--pink);color:#fff;box-shadow:0 0 0 4px rgba(255,107,157,.25);}
+.sig-step.done{border-color:var(--green);background:var(--green);color:#fff;}
+.sig-line{flex:1;height:3px;background:#ddd;}
+.step-panel{display:none;animation:slideIn .3s ease both;}
+.step-panel.active{display:block;}
+.step-title{font-family:var(--fd);font-size:20px;margin-bottom:18px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-weight:700;margin-bottom:5px;font-size:13px;color:#5a3e1b;}
+.form-input{width:100%;padding:11px 15px;border:3px solid var(--ink);border-radius:12px;font-family:var(--fb);font-size:15px;background:var(--cream);transition:all .2s;box-shadow:3px 3px 0 var(--ink);}
+.form-input:focus{outline:none;border-color:var(--pink);box-shadow:3px 3px 0 var(--pink);background:#fff;}
+.step-btn{width:100%;margin-top:8px;}
+.btn-row{display:flex;gap:12px;margin-top:12px;}
+.btn-row .btn-primary,.btn-row .btn-secondary{flex:1;text-align:center;}
+.interest-chips{display:flex;flex-wrap:wrap;gap:10px;}
+.chip{padding:7px 15px;border:2px solid var(--ink);border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:all .15s;user-select:none;}
+.chip.active{background:var(--yellow);transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+.avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.avatar-opt{font-size:38px;padding:10px;border:3px solid #ddd;border-radius:14px;cursor:pointer;text-align:center;transition:all .15s;background:#fff;}
+.avatar-opt:hover{border-color:var(--pink);transform:scale(1.1);}
+.avatar-opt.selected{border-color:var(--pink);background:#fff0f5;box-shadow:4px 4px 0 var(--pink);transform:scale(1.1);}
+.avatar-display{font-size:76px;text-align:center;margin-bottom:6px;animation:bounce 2s infinite;}
+.avatar-hint{text-align:center;color:#8a6a3a;font-family:var(--fh);font-size:16px;margin-bottom:18px;}
+.auth-switch{text-align:center;margin-top:14px;color:#8a6a3a;font-size:13px;font-weight:600;}
+.auth-switch span{color:var(--pink);font-weight:800;cursor:pointer;text-decoration:underline;}
+.forgot-link{display:block;text-align:right;color:var(--orange);font-size:12px;text-decoration:none;margin-top:-10px;margin-bottom:10px;font-weight:600;cursor:pointer;}
+.forgot-link:hover{text-decoration:underline;}
+.login-btn{width:100%;margin-top:6px;font-size:16px;padding:14px;}
+.divider{text-align:center;margin:18px 0;font-size:12px;color:#aaa;position:relative;}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#ddd;}
+.divider::before{left:0;}.divider::after{right:0;}
+
+/* ─── DASHBOARD ─── */
+.dash-body-inner{background:var(--cream);min-height:100vh;}
+.dash-nav{display:flex;align-items:center;padding:12px 32px;background:#fff;border-bottom:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);gap:14px;position:sticky;top:0;z-index:100;}
+.dash-nav .logo-text{font-family:var(--fd);font-size:20px;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
+.dash-nav-center{display:flex;gap:10px;margin:0 auto;}
+.stat-pill{background:var(--paper);border:2px solid var(--ink);border-radius:20px;padding:6px 14px;font-weight:800;font-size:14px;box-shadow:3px 3px 0 var(--ink);}
+.avatar-btn{font-size:28px;cursor:pointer;border:3px solid var(--ink);border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:all .2s;position:relative;}
+.avatar-btn:hover{transform:scale(1.1);}
+.profile-dropdown{position:fixed;top:74px;right:24px;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:18px;min-width:210px;box-shadow:8px 8px 0 var(--ink);z-index:200;display:none;animation:slideUp .2s ease both;}
+.profile-dropdown.open{display:block;}
+.profile-header{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
+.profile-avatar{font-size:38px;}
+.profile-name{font-weight:800;font-size:15px;}
+.profile-loc{font-size:11px;color:#8a6a3a;}
+.profile-coins{background:var(--yellow);border:2px solid var(--ink);border-radius:10px;padding:7px 10px;font-weight:800;text-align:center;margin-bottom:10px;font-size:14px;}
+.profile-link{display:block;padding:9px 0;border-bottom:1px dashed #ddd;text-decoration:none;color:var(--ink);font-weight:700;font-size:13px;cursor:pointer;}
+.profile-link:hover{color:var(--pink);}
+.profile-link:last-child{border-bottom:none;}
+.logout-link{color:var(--red)!important;}
+.dash-layout{display:grid;grid-template-columns:230px 1fr 210px;gap:22px;padding:28px;max-width:1180px;margin:0 auto;}
+.sidebar-card{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:18px;margin-bottom:18px;box-shadow:5px 5px 0 var(--ink);}
+.sidebar-card h4{font-family:var(--fd);font-size:15px;margin-bottom:12px;}
+.course-flag{font-size:44px;text-align:center;margin-bottom:6px;}
+.course-title{font-family:var(--fd);font-size:18px;text-align:center;}
+.course-sub{font-size:12px;text-align:center;color:#8a6a3a;margin-bottom:12px;}
+.progress-bar-wrap{background:#eee;border:2px solid var(--ink);border-radius:20px;height:13px;overflow:hidden;margin-bottom:5px;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:20px;transition:width 1s ease;}
+.progress-label{font-size:12px;text-align:center;color:#5a3e1b;font-weight:700;}
+.lb-row{display:flex;justify-content:space-between;padding:7px 10px;border-radius:8px;margin-bottom:3px;font-weight:700;font-size:13px;}
+.lb-row.gold{background:#FFF9C4;}.lb-row.silver{background:#F5F5F5;}.lb-row.bronze{background:#FFE0CC;}.lb-row.you{background:#FFF0F5;border:2px dashed var(--pink);}
+.week-dots{display:flex;gap:5px;justify-content:center;}
+.day-dot{width:32px;height:32px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#aaa;}
+.day-dot.done{background:var(--orange);border-color:var(--orange);color:#fff;}
+.dash-main{min-height:80vh;}
+.path-header{margin-bottom:20px;}
+.learning-path{display:flex;flex-direction:column;align-items:center;gap:0;padding:10px 0;}
+.node-wrap-inner{display:flex;flex-direction:column;align-items:center;transition:margin .5s ease;}
+.node-label{font-size:11px;font-weight:700;text-align:center;color:#5a3e1b;max-width:88px;margin-top:5px;}
+.lesson-node{width:76px;height:76px;border-radius:50%;border:4px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:30px;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:all .2s;position:relative;text-decoration:none;}
+.lesson-node:hover:not(.locked):not(.locked-24){transform:scale(1.1) translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink);}
+.lesson-node.completed{background:var(--green);}
+.lesson-node.active-node-ls{background:var(--yellow);animation:nodePulse 2s infinite;}
+.lesson-node.locked{background:#eee;cursor:not-allowed;opacity:.7;}
+.lesson-node.locked-24{background:#E8D5FF;cursor:not-allowed;border-style:dashed;}
+.node-tooltip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10;}
+.node-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--ink);}
+.lesson-node:hover .node-tooltip{opacity:1;}
+.path-connector{width:4px;height:28px;background:repeating-linear-gradient(180deg,var(--ink) 0 6px,transparent 6px 12px);margin:0 auto;}
+.path-section-divider{text-align:center;margin:18px 0;}
+.divider-stamp{display:inline-block;background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:10px 22px;font-family:var(--fd);font-size:16px;box-shadow:4px 4px 0 var(--ink);}
+.locked-stamp{background:#eee;color:#aaa;}
+.daily-goal{text-align:center;}
+.goal-ring{position:relative;width:78px;height:78px;margin:0 auto 10px;}
+.goal-ring svg{width:78px;height:78px;}
+.goal-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:900;font-size:16px;line-height:1.1;}
+.goal-text small{font-size:9px;font-weight:600;color:#aaa;}
+.tips-card p{font-size:14px;line-height:1.6;color:#5a3e1b;font-family:var(--fh);font-size:15px;}
+.explorer-avatar{font-size:60px;margin:6px 0;animation:bounce 2s infinite;display:block;text-align:center;}
+.explorer-level{font-family:var(--fd);font-size:15px;margin-bottom:10px;color:var(--purple);text-align:center;}
+.avatar-card{text-align:center;}
+
+/* ─── LESSON PAGE ─── */
+.lesson-body-inner{background:var(--cream);min-height:100vh;display:flex;flex-direction:column;}
+.lesson-topbar{display:flex;align-items:center;gap:14px;padding:14px 22px;background:#fff;border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:100;}
+.back-btn-ls{font-size:20px;font-weight:900;color:#aaa;cursor:pointer;padding:4px 10px;border-radius:8px;transition:all .2s;background:none;border:none;}
+.back-btn-ls:hover{color:var(--red);background:#fee;}
+.lesson-progress-wrap{flex:1;height:15px;background:#eee;border-radius:8px;border:2px solid var(--ink);overflow:hidden;}
+.lesson-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:8px;transition:width .5s ease;}
+.lesson-hearts{font-size:18px;letter-spacing:2px;}
+.lesson-wrapper{flex:1;max-width:660px;margin:0 auto;width:100%;padding:28px 22px;}
+.theory-card{background:#fff;border:3px solid var(--ink);border-radius:22px;padding:32px;box-shadow:8px 8px 0 var(--ink);animation:slideIn .4s cubic-bezier(.34,1.56,.64,1) both;}
+.theory-tag{display:inline-block;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:800;margin-bottom:14px;border:2px solid var(--ink);}
+.tag-theory{background:var(--blue);}.tag-quiz{background:var(--yellow);}.tag-workbook{background:var(--green);}.tag-revision{background:var(--purple);color:#fff;}
+.theory-headline{font-family:var(--fd);font-size:26px;margin-bottom:14px;line-height:1.2;}
+.theory-image{font-size:76px;text-align:center;margin:18px 0;animation:float 3s ease-in-out infinite;}
+.theory-body{font-size:15px;line-height:1.8;color:#3a2800;margin-bottom:18px;}
+.key-terms{background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:18px;margin:18px 0;}
+.key-terms h4{font-family:var(--fd);font-size:15px;margin-bottom:10px;}
+.term-row{display:flex;gap:10px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px dashed #ddd;}
+.term-row:last-child{border-bottom:none;margin-bottom:0;}
+.term-word{font-weight:800;color:var(--orange);min-width:110px;font-family:var(--fh);font-size:17px;}
+.term-def{font-size:13px;color:#5a3e1b;line-height:1.5;}
+.scrapbook-note{background:var(--yellow);border:2px solid var(--ink);border-radius:4px;padding:14px 18px;font-family:var(--fh);font-size:17px;transform:rotate(-1deg);box-shadow:4px 4px 0 var(--ink);margin:18px 0;position:relative;}
+.scrapbook-note::before{content:'📌';position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:22px;}
+.quiz-question{font-family:var(--fd);font-size:22px;margin-bottom:24px;line-height:1.3;}
+.quiz-options{display:flex;flex-direction:column;gap:12px;}
+.quiz-option{padding:14px 18px;background:#fff;border:3px solid var(--ink);border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:all .15s;display:flex;align-items:center;gap:10px;}
+.quiz-option:hover:not(.disabled){transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);background:var(--paper);}
+.quiz-option.correct{background:#d4f7d4;border-color:var(--green);box-shadow:4px 4px 0 var(--green);}
+.quiz-option.wrong{background:#fdd;border-color:var(--red);box-shadow:4px 4px 0 var(--red);}
+.quiz-option.disabled{cursor:default;}
+.option-letter{width:30px;height:30px;border:2px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;}
+.workbook-prompt{font-family:var(--fd);font-size:20px;margin-bottom:18px;}
+.workbook-lines{background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:18px;min-height:150px;background-image:repeating-linear-gradient(to bottom,transparent,transparent 31px,#ddd 31px,#ddd 32px);background-position:0 8px;}
+.workbook-textarea{width:100%;min-height:150px;background:transparent;border:none;outline:none;font-family:var(--fh);font-size:19px;line-height:32px;color:var(--ink);resize:vertical;}
+.workbook-hint{margin-top:10px;font-size:13px;color:#8a6a3a;font-style:italic;}
+.lesson-footer{position:sticky;bottom:0;background:#fff;border-top:3px solid var(--ink);padding:18px 28px;display:none;align-items:center;justify-content:space-between;gap:14px;}
+.lesson-footer.show{display:flex;}
+.answer-feedback{flex:1;font-family:var(--fd);font-size:18px;}
+.feedback-correct{color:var(--green);}.feedback-wrong{color:var(--red);}
+.continue-btn{background:var(--green);color:#fff;border:3px solid var(--ink);border-radius:14px;padding:13px 32px;font-family:var(--fb);font-weight:900;font-size:17px;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:all .15s;}
+.continue-btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink);}
+.continue-btn.wrong-btn{background:var(--red);}
+.complete-screen{text-align:center;padding:44px 22px;animation:slideIn .5s ease both;}
+.complete-trophy{font-size:76px;animation:bounce 1s ease 3;}
+.complete-title{font-family:var(--fd);font-size:34px;margin:14px 0 6px;color:var(--orange);}
+.complete-stats{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:22px 0;}
+.complete-stat{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:18px;min-width:100px;box-shadow:5px 5px 0 var(--ink);}
+.stat-num{font-family:var(--fd);font-size:30px;color:var(--orange);}
+.stat-lbl{font-size:12px;font-weight:700;color:#8a6a3a;}
+.coins-earned{font-family:var(--fd);font-size:24px;background:var(--yellow);border:3px solid var(--ink);border-radius:18px;padding:14px 28px;display:inline-block;box-shadow:5px 5px 0 var(--ink);margin:14px 0 26px;animation:bounce .5s ease;}
+
+@media(max-width:1024px){.dash-layout{grid-template-columns:200px 1fr;}.dash-right{display:none;}}
+@media(max-width:768px){
+  .navbar{padding:12px 18px;}.nav-links{display:none;}.hamburger{display:block;}
+  .hero{flex-direction:column;padding:100px 20px 40px;gap:28px;}.scrapbook-preview{display:none;}
+  .sticker{font-size:26px;}
+  .about-section,.how-section,.pricing-section{padding:56px 20px;}
+  .steps-path{gap:6px;}.path-line{min-width:14px;}
+  .dash-layout{grid-template-columns:1fr;padding:14px;}.dash-sidebar{display:none;}
+  .auth-card{padding:28px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ PAGE: LANDING ════════════════ -->
+<div class="page active" id="page-landing">
+<nav class="navbar" id="navbar">
+  <div class="nav-logo" onclick="goTo('page-landing')">
+    <div class="logo-icon">⏳</div>
+    <span class="logo-text">Epoch</span>
+  </div>
+  <div class="nav-links" id="nav-links">
+    <span class="nav-link" onclick="scrollToId('about')">About</span>
+    <span class="nav-link" onclick="scrollToId('how')">How it works</span>
+    <button class="btn-secondary" onclick="goTo('page-login')">I already have an account</button>
+    <button class="btn-primary pulse-btn" onclick="goTo('page-signup')">Get Started ✨</button>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleHamburger()">☰</button>
+</nav>
+
+<section class="hero">
+  <div id="hero-stickers">
+    <div class="sticker" style="top:12%;left:3%"    onclick="popSticker(this)">🏛️</div>
+    <div class="sticker" style="top:22%;right:5%"   onclick="popSticker(this)">🗺️</div>
+    <div class="sticker" style="top:60%;left:2%"    onclick="popSticker(this)">🌍</div>
+    <div class="sticker" style="top:68%;right:3%"   onclick="popSticker(this)">📜</div>
+    <div class="sticker" style="top:37%;left:8%"    onclick="popSticker(this)">⚔️</div>
+    <div class="sticker" style="top:47%;right:8%"   onclick="popSticker(this)">🕌</div>
+    <div class="sticker" style="top:78%;left:12%"   onclick="popSticker(this)">🗿</div>
+    <div class="sticker" style="top:17%;right:14%"  onclick="popSticker(this)">🎭</div>
+    <div class="sticker" style="top:55%;left:14%"   onclick="popSticker(this)">🏰</div>
+    <div class="sticker" style="top:83%;right:10%"  onclick="popSticker(this)">🌐</div>
+  </div>
+  <div class="hero-content">
+    <div class="tape tape-yellow">NEW — 50+ countries!</div>
+    <h1 class="hero-title">Your story.<br><span class="accent-underline" id="type-word">history.</span></h1>
+    <p class="hero-sub">Explore your roots — continent by continent, village by village. Interactive lessons, quizzes, and your own learning path. Like Duolingo, but for YOUR heritage.</p>
+    <div class="hero-cta">
+      <button class="btn-big" onclick="goTo('page-signup');spawnConfettiFrom(this)">Start Exploring 🚀</button>
+      <p class="hero-note">Free forever for core courses • Ages 12–18</p>
+    </div>
+    <div class="hero-badges">
+      <div class="badge">🌎 50+ Countries</div>
+      <div class="badge">📚 500+ Lessons</div>
+      <div class="badge">🏆 Earn Coins</div>
+      <div class="badge">📜 Certificates</div>
+    </div>
+  </div>
+  <div class="scrapbook-preview" id="scrapbook">
+    <div class="book-page page1" onclick="flipPage(0)"><div class="page-stamp">🇺🇿 Uzbekistan</div><div class="page-line"></div><div class="page-line short"></div><div class="page-photo">🕌</div></div>
+    <div class="book-page page2" onclick="flipPage(1)"><div class="page-stamp">🇳🇬 Nigeria</div><div class="page-line"></div><div class="page-photo">🥁</div></div>
+    <div class="book-page page3" onclick="flipPage(2)"><div class="page-stamp">🇯🇵 Japan</div><div class="page-photo">⛩️</div></div>
+  </div>
+</section>
+
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>🇺🇿 Uzbekistan</span><span>🇳🇬 Nigeria</span><span>🇮🇳 India</span><span>🇧🇷 Brazil</span>
+    <span>🇯🇵 Japan</span><span>🇲🇽 Mexico</span><span>🇪🇬 Egypt</span><span>🇰🇷 Korea</span>
+    <span>🇹🇷 Turkey</span><span>🇲🇦 Morocco</span><span>🇷🇺 Russia</span><span>🇵🇭 Philippines</span>
+    <span>🇬🇭 Ghana</span><span>🇻🇳 Vietnam</span><span>🇵🇪 Peru</span><span>🇮🇩 Indonesia</span>
+    <span>🇺🇿 Uzbekistan</span><span>🇳🇬 Nigeria</span><span>🇮🇳 India</span><span>🇧🇷 Brazil</span>
+    <span>🇯🇵 Japan</span><span>🇲🇽 Mexico</span><span>🇪🇬 Egypt</span><span>🇰🇷 Korea</span>
+  </div>
+</div>
+
+<section class="about-section" id="about">
+  <div class="tape tape-pink section-tape">Who is Epoch for?</div>
+  <div class="about-grid">
+    <div class="about-card"><div class="card-icon">🧑‍🎓</div><h3>For Teens 12–18</h3><p>Learn history that schools don't teach — your village, your region, your people.</p></div>
+    <div class="about-card"><div class="card-icon">🌍</div><h3>Your Heritage, Your Way</h3><p>Choose your continent → country → region → city. The history of YOUR roots.</p></div>
+    <div class="about-card"><div class="card-icon">🎮</div><h3>Learning feels like gaming</h3><p>Earn coins, level up your avatar, unlock secret lore packs. History is an adventure.</p></div>
+    <div class="about-card"><div class="card-icon">📜</div><h3>Real Certificates</h3><p>Pass the final exam → get a PDF certificate with QR code for your school portfolio.</p></div>
+  </div>
+</section>
+
+<section class="how-section" id="how">
+  <div class="tape tape-blue section-tape">How it works</div>
+  <div class="steps-path">
+    <div class="step-node active-node"><div class="node-icon">🌍</div><div class="node-label">Pick continent</div></div>
+    <div class="path-line"></div>
+    <div class="step-node"><div class="node-icon">🏳️</div><div class="node-label">Choose country</div></div>
+    <div class="path-line"></div>
+    <div class="step-node"><div class="node-icon">📍</div><div class="node-label">Drill into region</div></div>
+    <div class="path-line"></div>
+    <div class="step-node"><div class="node-icon">📖</div><div class="node-label">Theory + Practice</div></div>
+    <div class="path-line"></div>
+    <div class="step-node locked-node"><div class="node-icon">🔒</div><div class="node-label">Revision (Day 24)</div></div>
+    <div class="path-line"></div>
+    <div class="step-node"><div class="node-icon">🏆</div><div class="node-label">Exam + Certificate</div></div>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="tape tape-green section-tape">Free vs Premium</div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-icon">🆓</div><h3>Free Forever</h3>
+      <ul><li>✅ 50+ countries</li><li>✅ All core lessons</li><li>✅ Quizzes &amp; workbooks</li><li>✅ Coins &amp; avatar</li><li>✅ Final exam</li></ul>
+      <button class="btn-primary" onclick="goTo('page-signup')">Start Free</button>
+    </div>
+    <div class="price-card premium-card">
+      <div class="price-badge">⭐ Premium</div>
+      <div class="price-icon">💎</div><h3>Unlock More</h3>
+      <ul><li>✅ Rare micro-regions</li><li>✅ Ancient languages</li><li>✅ Deep village history</li><li>✅ Official PDF Certificate</li><li>✅ QR code for your CV</li></ul>
+      <div class="price-tag">From $1–2 per course</div>
+      <button class="btn-primary" onclick="goTo('page-signup')">Get Premium</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⏳ Epoch</div>
+  <p>Made with ❤️ for curious teenagers everywhere.</p>
+  <div style="margin-top:12px"><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Contact</a></div>
+</footer>
+</div><!-- /page-landing -->
+
+
+<!-- ════════════════ PAGE: SIGNUP ════════════════ -->
+<div class="page" id="page-signup">
+<div class="auth-body-inner">
+  <div class="auth-sticker" style="top:5%;left:5%;animation-delay:0s">🗺️</div>
+  <div class="auth-sticker" style="top:15%;right:8%;animation-delay:-2s">🏛️</div>
+  <div class="auth-sticker" style="bottom:20%;left:3%;animation-delay:-1s">📜</div>
+  <div class="auth-sticker" style="bottom:8%;right:5%;animation-delay:-3s">🌍</div>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <span class="back-link" onclick="goTo('page-landing')">← Back</span>
+      <div class="auth-logo">⏳ Epoch</div>
+      <h1 class="auth-title">Join the adventure!</h1>
+      <p class="auth-sub">Your journey through history starts here 🚀</p>
+      <div class="signup-steps">
+        <div class="sig-step active" id="sd1">1</div>
+        <div class="sig-line"></div>
+        <div class="sig-step" id="sd2">2</div>
+        <div class="sig-line"></div>
+        <div class="sig-step" id="sd3">3</div>
+      </div>
+      <!-- Step 1 -->
+      <div class="step-panel active" id="sp1">
+        <div class="step-title">Create your account</div>
+        <div class="form-group"><label>Your name</label><input type="text" id="su-name" class="form-input" placeholder="e.g. Aisha, Kenji, Mateo..."/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="su-email" class="form-input" placeholder="your@email.com"/></div>
+        <div class="form-group"><label>Password</label><input type="password" id="su-pwd" class="form-input" placeholder="Make it strong!"/></div>
+        <div class="form-group"><label>Age</label>
+          <select id="su-age" class="form-input">
+            <option value="">Select your age</option>
+            <option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option>
+          </select>
+        </div>
+        <button class="btn-primary step-btn" onclick="suNext(1)">Next Step →</button>
+      </div>
+      <!-- Step 2 -->
+      <div class="step-panel" id="sp2">
+        <div class="step-title">Choose your history path 🌍</div>
+        <div class="form-group"><label>Continent</label>
+          <select id="su-cont" class="form-input" onchange="suUpdateCountries()">
+            <option value="">Choose continent...</option>
+            <option value="asia">Asia</option><option value="africa">Africa</option>
+            <option value="europe">Europe</option><option value="americas">The Americas</option>
+            <option value="oceania">Oceania</option><option value="middleeast">Middle East</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Country</label>
+          <select id="su-country" class="form-input" onchange="suUpdateRegions()"><option value="">Choose country...</option></select>
+        </div>
+        <div class="form-group"><label>Region / Province</label>
+          <select id="su-region" class="form-input"><option value="">Choose region...</option></select>
+        </div>
+        <div class="form-group"><label>What interests you most?</label>
+          <div class="interest-chips">
+            <div class="chip" onclick="this.classList.toggle('active')">🏛️ Ancient History</div>
+            <div class="chip" onclick="this.classList.toggle('active')">⚔️ Wars &amp; Conflicts</div>
+            <div class="chip" onclick="this.classList.toggle('active')">🕌 Religion &amp; Culture</div>
+            <div class="chip" onclick="this.classList.toggle('active')">👑 Rulers &amp; Dynasties</div>
+            <div class="chip" onclick="this.classList.toggle('active')">🌾 Daily Life</div>
+            <div class="chip" onclick="this.classList.toggle('active')">🎭 Art &amp; Language</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="suPrev(2)">← Back</button>
+          <button class="btn-primary" onclick="suNext(2)">Next Step →</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="step-panel" id="sp3">
+        <div class="step-title">Pick your explorer avatar! 🧭</div>
+        <div class="avatar-grid">
+          <div class="avatar-opt selected" onclick="selectAvatar(this)">🧑‍🏫</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">👸</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🧙</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🦸</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🧝</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🧜</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🧚</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)">🦅</div>
+        </div>
+        <div class="avatar-display" id="av-display">🧑‍🏫</div>
+        <p class="avatar-hint">You'll earn coins to customize your look!</p>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="suPrev(3)">← Back</button>
+          <button class="btn-primary" onclick="completeSignup()">Start Learning! 🚀</button>
+        </div>
+      </div>
+    </div>
+    <p class="auth-switch">Already have an account? <span onclick="goTo('page-login')">Log in</span></p>
+  </div>
+</div>
+</div><!-- /page-signup -->
+
+
+<!-- ════════════════ PAGE: LOGIN ════════════════ -->
+<div class="page" id="page-login">
+<div class="auth-body-inner">
+  <div class="auth-sticker" style="top:5%;left:5%;animation-delay:0s">⚔️</div>
+  <div class="auth-sticker" style="top:10%;right:8%;animation-delay:-2s">🏰</div>
+  <div class="auth-sticker" style="bottom:15%;left:3%;animation-delay:-1s">🌙</div>
+  <div class="auth-sticker" style="bottom:8%;right:5%;animation-delay:-3s">⭐</div>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <span class="back-link" onclick="goTo('page-landing')">← Back to home</span>
+      <div class="auth-logo">⏳ Epoch</div>
+      <h1 class="auth-title">Welcome back! 👋</h1>
+      <p class="auth-sub">Your history adventure awaits</p>
+      <div class="form-group"><label>Email</label><input type="email" id="li-email" class="form-input" placeholder="your@email.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="li-pwd" class="form-input" placeholder="••••••••"/>
+        <span class="forgot-link">Forgot password?</span>
+      </div>
+      <button class="btn-primary login-btn" onclick="doLogin()">Log In 🚀</button>
+      <div class="divider">or</div>
+      <button class="btn-secondary login-btn" onclick="demoLogin()">Try Demo Account 👀</button>
+    </div>
+    <p class="auth-switch">New here? <span onclick="goTo('page-signup')">Create an account</span></p>
+  </div>
+</div>
+</div><!-- /page-login -->
+
+
+<!-- ════════════════ PAGE: DASHBOARD ════════════════ -->
+<div class="page" id="page-dashboard">
+<div class="dash-body-inner">
+  <nav class="dash-nav">
+    <div class="nav-logo" onclick="goTo('page-landing')">
+      <div class="logo-icon" style="font-size:22px">⏳</div>
+      <span class="logo-text">Epoch</span>
+    </div>
+    <div class="dash-nav-center">
+      <div class="stat-pill">🔥 <span id="d-streak">0</span> day streak</div>
+      <div class="stat-pill">💰 <span id="d-coins">0</span> coins</div>
+    </div>
+    <div style="position:relative">
+      <div class="avatar-btn" id="d-avbtn" onclick="toggleDropdown()"><span id="d-avicon">🧑‍🏫</span></div>
+      <div class="profile-dropdown" id="d-dropdown">
+        <div class="profile-header">
+          <div class="profile-avatar" id="dd-av">🧑‍🏫</div>
+          <div><div class="profile-name" id="dd-name">Explorer</div><div class="profile-loc" id="dd-loc">📍 —</div></div>
+        </div>
+        <div class="profile-coins">💰 <span id="dd-coins">0</span> coins</div>
+        <span class="profile-link">🛍️ Avatar Shop</span>
+        <span class="profile-link">📜 My Certificates</span>
+        <span class="profile-link">⚙️ Settings</span>
+        <span class="profile-link logout-link" onclick="goTo('page-landing')">🚪 Log Out</span>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-card">
+        <div class="course-flag" id="sb-flag">🌍</div>
+        <div class="course-title" id="sb-country">Country</div>
+        <div class="course-sub" id="sb-region">Region</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="sb-prog" style="width:25%"></div></div>
+        <div class="progress-label">25% complete</div>
+      </div>
+      <div class="sidebar-card">
+        <h4>🏆 Top Explorers</h4>
+        <div class="lb-row gold"><span>👑 Aisha</span><span>1,240</span></div>
+        <div class="lb-row silver"><span>🥈 Kenji</span><span>980</span></div>
+        <div class="lb-row bronze"><span>🥉 Mateo</span><span>760</span></div>
+        <div class="lb-row you"><span>⭐ You</span><span id="lb-coins">0</span></div>
+      </div>
+      <div class="sidebar-card">
+        <h4>📅 Weekly Streak</h4>
+        <div class="week-dots">
+          <div class="day-dot done">M</div><div class="day-dot done">T</div>
+          <div class="day-dot done">W</div><div class="day-dot done">T</div>
+          <div class="day-dot done">F</div><div class="day-dot">S</div><div class="day-dot">S</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dash-main">
+      <div class="path-header"><div class="tape tape-yellow">Chapter 1: Ancient Beginnings</div></div>
+      <div class="learning-path" id="lpath1"></div>
+      <div class="path-section-divider"><div class="divider-stamp">📖 Chapter 2: The Silk Road Era</div></div>
+      <div class="learning-path" id="lpath2"></div>
+      <div class="path-section-divider"><div class="divider-stamp locked-stamp">🔒 Chapter 3: Empires (Complete Ch.2 first)</div></div>
+    </main>
+
+    <aside class="dash-right">
+      <div class="sidebar-card daily-goal">
+        <h4>🎯 Daily Goal</h4>
+        <div class="goal-ring">
+          <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#eee" stroke-width="8"/><circle cx="40" cy="40" r="30" fill="none" stroke="var(--pink)" stroke-width="8" stroke-dasharray="94.2 188.4" stroke-linecap="round" transform="rotate(-90 40 40)"/></svg>
+          <div class="goal-text">1/2<br><small>lessons</small></div>
+        </div>
+      </div>
+      <div class="sidebar-card tips-card">
+        <h4>💡 Did you know?</h4>
+        <p id="d-fact">Loading...</p>
+      </div>
+      <div class="sidebar-card avatar-card">
+        <h4>Your Explorer</h4>
+        <span class="explorer-avatar" id="d-exp-av">🧑‍🏫</span>
+        <div class="explorer-level">Level <span id="d-lvl">1</span></div>
+        <button class="btn-primary" style="font-size:12px;padding:7px 14px">🛍️ Shop</button>
+      </div>
+    </aside>
+  </div>
+</div>
+</div><!-- /page-dashboard -->
+
+
+<!-- ════════════════ PAGE: LESSON ════════════════ -->
+<div class="page" id="page-lesson">
+<div class="lesson-body-inner">
+  <div class="lesson-topbar">
+    <button class="back-btn-ls" onclick="goTo('page-dashboard')">✕</button>
+    <div class="lesson-progress-wrap"><div class="lesson-progress-bar" id="ls-prog" style="width:0%"></div></div>
+    <div class="lesson-hearts" id="ls-hearts">❤️❤️❤️</div>
+  </div>
+  <div class="lesson-wrapper" id="ls-wrapper"><div style="text-align:center;font-size:22px;padding:60px;font-family:var(--fd)">⏳ Loading...</div></div>
+  <div class="lesson-footer" id="ls-footer">
+    <div class="answer-feedback" id="ls-feedback"></div>
+    <button class="continue-btn" id="ls-cont" onclick="lsNext()">Continue →</button>
+  </div>
+</div>
+</div><!-- /page-lesson -->
+
+
+<script>
+// ═══════════════════════════════════════════════════
+// PAGE ROUTER
+// ═══════════════════════════════════════════════════
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo(0,0);
+  }
+  if (id === 'page-dashboard') initDashboard();
+  if (id === 'page-landing') initLanding();
+}
+function scrollToId(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════
+// LANDING PAGE
+// ═══════════════════════════════════════════════════
+function initLanding() {
+  // Typewriter
+  const words = ['history.','roots.','story.','heritage.'];
+  let wi=0,ci=0,del=false;
+  const tw = document.getElementById('type-word');
+  if (!tw) return;
+  clearInterval(window._twTimer);
+  tw.textContent = words[0];
+  window._twTimer = setInterval(()=>{
+    const cur=words[wi];
+    if(!del){ci++;tw.textContent=cur.slice(0,ci);if(ci===cur.length){del=true;setTimeout(()=>{},1800);}}
+    else{ci--;tw.textContent=cur.slice(0,ci);if(ci===0){del=false;wi=(wi+1)%words.length;}}
+  },del?60:110);
+
+  // Navbar scroll
+  const nb=document.getElementById('navbar');
+  window.onscroll=()=>{if(nb)nb.classList.toggle('scrolled',window.scrollY>60);};
+
+  // Scrapbook hover
+  const pages=document.querySelectorAll('.book-page');
+  const rots=[-6,2,8];
+  pages.forEach((p,i)=>{
+    p.onmouseenter=()=>{
+      pages.forEach((pp,j)=>{pp.style.transform=j===i?'rotate(0deg) scale(1.06)':`rotate(${(j-i)*5}deg)`;pp.style.zIndex=j===i?'10':String(3-j);});
+    };
+    p.onmouseleave=()=>{pages.forEach((pp,j)=>{pp.style.transform=`rotate(${rots[j]}deg)`;pp.style.zIndex=String(3-j);});};
+  });
+
+  // Sticker parallax
+  const stickers=document.querySelectorAll('#hero-stickers .sticker');
+  document.onmousemove=(e)=>{
+    if(window.innerWidth<768)return;
+    const dx=(e.clientX-window.innerWidth/2)/(window.innerWidth/2);
+    const dy=(e.clientY-window.innerHeight/2)/(window.innerHeight/2);
+    stickers.forEach((s,i)=>{const d=(i%4+1)*7;s.style.transform=`translate(${dx*d}px,${dy*d}px) rotate(${dx*6}deg)`;});
+  };
+}
+
+function flipPage(i) {
+  const pages=document.querySelectorAll('.book-page');
+  const rots=[-6,2,8];
+  pages.forEach((p,j)=>{
+    p.style.transform=j===i?'rotate(0deg) scale(1.06)':`rotate(${rots[j]}deg)`;
+    p.style.zIndex=j===i?'10':String(3-j);
+  });
+  setTimeout(()=>{pages.forEach((p,j)=>{p.style.transform=`rotate(${rots[j]}deg)`;p.style.zIndex=String(3-j);});},800);
+}
+
+function toggleHamburger() {
+  const links=document.getElementById('nav-links');
+  const hb=document.getElementById('hamburger');
+  if(links.style.display==='flex'&&links.style.flexDirection==='column'){
+    links.removeAttribute('style');hb.textContent='☰';
+  } else {
+    Object.assign(links.style,{display:'flex',flexDirection:'column',position:'fixed',top:'70px',right:'16px',background:'#fff',padding:'18px',border:'3px solid var(--ink)',borderRadius:'18px',boxShadow:'8px 8px 0 var(--ink)',zIndex:'999',gap:'12px'});
+    hb.textContent='✕';
+  }
+}
+
+function popSticker(el){
+  el.style.transform='scale(2) rotate(20deg)';
+  el.style.transition='transform .2s cubic-bezier(.34,1.56,.64,1)';
+  spawnConfettiFrom(el);
+  setTimeout(()=>{el.style.transform='';el.style.transition='';},400);
+}
+
+// ═══════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════
+function spawnConfettiFrom(el){
+  const rect=el.getBoundingClientRect();
+  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+  const colors=['#FF6B9D','#FFD93D','#4ECDC4','#6BCB77','#FF8C42'];
+  const emojis=['✨','⭐','🌟','💫','🎉'];
+  for(let i=0;i<12;i++){
+    const d=document.createElement('div');
+    const em=Math.random()>.4;
+    d.style.cssText=`position:fixed;pointer-events:none;z-index:9999;left:${cx}px;top:${cy}px;font-size:${em?18:10}px;${em?'':`width:10px;height:10px;border-radius:2px;background:${colors[i%colors.length]};`}`;
+    if(em)d.textContent=emojis[i%emojis.length];
+    document.body.appendChild(d);
+    const ang=(Math.PI*2*i)/12, dist=60+Math.random()*80;
+    d.animate([
+      {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(calc(-50% + ${Math.cos(ang)*dist}px),calc(-50% + ${Math.sin(ang)*dist-40}px)) scale(0.2) rotate(${Math.random()*720}deg)`,opacity:0}
+    ],{duration:700+Math.random()*400,easing:'ease-out',fill:'forwards'}).finished.then(()=>d.remove());
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// SIGNUP
+// ═══════════════════════════════════════════════════
+const suCountries={
+  asia:['Uzbekistan','Kazakhstan','India','China','Japan','South Korea','Vietnam','Philippines','Indonesia','Thailand','Nepal','Mongolia','Kyrgyzstan','Tajikistan','Myanmar'],
+  africa:['Nigeria','Egypt','Kenya','Ethiopia','Ghana','South Africa','Morocco','Tanzania','Uganda','Rwanda','Senegal','Cameroon','Zimbabwe','Mozambique','Tunisia'],
+  europe:['Russia','Ukraine','Poland','Germany','France','Spain','Italy','Greece','Romania','Hungary','Czech Republic','Serbia','Bulgaria','Croatia','Portugal'],
+  americas:['Brazil','Mexico','Argentina','Colombia','Peru','Chile','Venezuela','Ecuador','Bolivia','Cuba','Haiti','Jamaica','Guatemala','Honduras','Uruguay'],
+  oceania:['Australia','New Zealand','Papua New Guinea','Fiji','Samoa','Tonga','Vanuatu','Palau','Marshall Islands','Kiribati'],
+  middleeast:['Turkey','Iran','Saudi Arabia','Iraq','Syria','Jordan','Lebanon','Yemen','UAE','Qatar','Kuwait','Bahrain','Israel','Palestine','Oman']
+};
+const suRegions={
+  'Uzbekistan':['Tashkent','Samarkand','Bukhara','Fergana','Namangan','Andijan','Navoiy','Kashkadarya','Surkhandarya','Khorezm'],
+  'Kazakhstan':['Almaty','Astana','Shymkent','Aktobe','Atyrau','Karaganda','Pavlodar','East Kazakhstan'],
+  'India':['Maharashtra','Tamil Nadu','Rajasthan','Gujarat','West Bengal','Uttar Pradesh','Kerala','Karnataka','Punjab','Delhi'],
+  'Japan':['Tokyo','Osaka','Kyoto','Hokkaido','Okinawa','Aichi','Fukuoka','Hyogo','Kanagawa'],
+  'Nigeria':['Lagos','Kano','Abuja FCT','Rivers','Oyo','Katsina','Borno','Delta','Kaduna'],
+  'Egypt':['Cairo','Alexandria','Giza','Luxor','Aswan','Sinai','Mansoura','Tanta','Asyut'],
+  'Brazil':['São Paulo','Rio de Janeiro','Bahia','Minas Gerais','Paraná','Rio Grande do Sul','Pernambuco','Amazonas'],
+  'Turkey':['Istanbul','Ankara','Izmir','Antalya','Bursa','Cappadocia','Black Sea Region','Eastern Anatolia'],
+  'Russia':['Moscow','Saint Petersburg','Tatarstan','Chechen Republic','Dagestan','Bashkortostan','Yakutia','Siberia'],
+  'Mexico':['Mexico City','Jalisco','Oaxaca','Yucatán','Chiapas','Veracruz','Guanajuato','Puebla'],
+  'default':['North Region','South Region','East Region','West Region','Central Region','Coastal Region','Highland Region']
+};
+function suUpdateCountries(){
+  const cont=document.getElementById('su-cont').value;
+  const sel=document.getElementById('su-country');
+  sel.innerHTML='<option value="">Choose country...</option>';
+  document.getElementById('su-region').innerHTML='<option value="">Choose region...</option>';
+  (suCountries[cont]||[]).forEach(c=>sel.innerHTML+=`<option>${c}</option>`);
+}
+function suUpdateRegions(){
+  const c=document.getElementById('su-country').value;
+  const sel=document.getElementById('su-region');
+  sel.innerHTML='<option value="">Choose region...</option>';
+  (suRegions[c]||suRegions['default']).forEach(r=>sel.innerHTML+=`<option>${r}</option>`);
+}
+function suNext(from){
+  document.getElementById('sp'+from).classList.remove('active');
+  document.getElementById('sd'+from).classList.remove('active');
+  document.getElementById('sd'+from).classList.add('done');
+  document.getElementById('sd'+from).textContent='✓';
+  const next=from+1;
+  document.getElementById('sp'+next).classList.add('active');
+  document.getElementById('sd'+next).classList.add('active');
+}
+function suPrev(from){
+  document.getElementById('sp'+from).classList.remove('active');
+  document.getElementById('sd'+from).classList.remove('active');
+  const prev=from-1;
+  document.getElementById('sp'+prev).classList.add('active');
+  document.getElementById('sd'+prev).classList.remove('done');
+  document.getElementById('sd'+prev).classList.add('active');
+  document.getElementById('sd'+prev).textContent=String(prev);
+}
+function selectAvatar(el){
+  document.querySelectorAll('.avatar-opt').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('av-display').textContent=el.textContent;
+}
+function completeSignup(){
+  const u={
+    name:document.getElementById('su-name').value||'Explorer',
+    country:document.getElementById('su-country').value||'Uzbekistan',
+    region:document.getElementById('su-region').value||'',
+    avatar:document.getElementById('av-display').textContent||'🧑‍🏫',
+    coins:0,streak:0,completedLessons:[]
+  };
+  localStorage.setItem('epochUser',JSON.stringify(u));
+  goTo('page-dashboard');
+}
+
+// ═══════════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════════
+function doLogin(){
+  const saved=localStorage.getItem('epochUser');
+  if(saved){goTo('page-dashboard');}else{demoLogin();}
+}
+function demoLogin(){
+  const u={name:'Explorer',country:'Uzbekistan',region:'Samarkand',avatar:'🧑‍🏫',coins:340,streak:5,completedLessons:['uz-1-1','uz-1-2']};
+  localStorage.setItem('epochUser',JSON.stringify(u));
+  goTo('page-dashboard');
+}
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+const flags={'Uzbekistan':'🇺🇿','Kazakhstan':'🇰🇿','India':'🇮🇳','Japan':'🇯🇵','Nigeria':'🇳🇬','Brazil':'🇧🇷','Egypt':'🇪🇬','Turkey':'🇹🇷','Mexico':'🇲🇽','Russia':'🇷🇺','default':'🌍'};
+const facts=['The Silk Road was not one road — it was a vast network linking East and West!','Samarkand is one of the oldest continuously inhabited cities in Central Asia.','The Great Wall of China is NOT visible from space — popular myth!','Mali\'s Mansa Musa may have been the wealthiest person in all of human history.','Japan\'s samurai originally served as mounted archers, not sword-fighters.','The Aztec capital Tenochtitlan was larger than most European cities in 1500 CE.'];
+const lessonNodes={
+  default:{
+    ch1:[
+      {id:'uz-1-1',icon:'🏺',label:'Ancient Origins',type:'theory'},
+      {id:'uz-1-2',icon:'⚔️',label:'Early Conflicts',type:'theory'},
+      {id:'uz-1-3',icon:'👑',label:'First Empires',type:'theory'},
+      {id:'uz-1-4',icon:'📝',label:'Quiz: Ancient Era',type:'quiz'},
+      {id:'uz-1-5',icon:'🔒',label:'Revision (24h)',type:'revision',locked24:true},
+    ],
+    ch2:[
+      {id:'uz-2-1',icon:'🐪',label:'Trade Routes',type:'theory'},
+      {id:'uz-2-2',icon:'🕌',label:'Religion Arrives',type:'theory'},
+      {id:'uz-2-3',icon:'📚',label:'Golden Age',type:'theory'},
+      {id:'uz-2-4',icon:'✍️',label:'Workbook',type:'workbook'},
+      {id:'uz-2-5',icon:'🎯',label:'Quiz: Ch.2',type:'quiz'},
+    ]
+  }
+};
+function initDashboard(){
+  const u=JSON.parse(localStorage.getItem('epochUser'))||{name:'Explorer',country:'Uzbekistan',region:'',avatar:'🧑‍🏫',coins:0,streak:0,completedLessons:[]};
+  const setT=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  setT('d-streak',u.streak||0); setT('d-coins',u.coins||0); setT('lb-coins',u.coins||0);
+  setT('dd-name',u.name); setT('dd-loc','📍 '+(u.region||'')+(u.region&&u.country?', ':'')+u.country);
+  setT('dd-coins',u.coins||0); setT('d-fact',facts[Math.floor(Math.random()*facts.length)]);
+  setT('sb-country',u.country||''); setT('sb-region',u.region||'');
+  const flag=flags[u.country]||flags['default'];
+  ['sb-flag','d-avicon','dd-av','d-exp-av'].forEach(id=>setT(id,id.includes('av')||id==='dd-av'?u.avatar:flag));
+  setT('sb-flag',flag);
+  setT('d-lvl',Math.floor(((u.completedLessons||[]).length)/2)+1);
+  const nodes=lessonNodes['default'];
+  buildDashPath(nodes.ch1,'lpath1',u);
+  buildDashPath(nodes.ch2,'lpath2',u);
+}
+function buildDashPath(nodes,cid,u){
+  const c=document.getElementById(cid);if(!c)return;c.innerHTML='';
+  const done=u.completedLessons||[];
+  const zig=[0,80,140,80,0,-80,-140,-80];
+  nodes.forEach((node,i)=>{
+    if(i>0){const conn=document.createElement('div');conn.className='path-connector';c.appendChild(conn);}
+    const completed=done.includes(node.id);
+    const prevDone=i===0||done.includes(nodes[i-1]?.id);
+    const isActive=!completed&&prevDone&&!node.locked24;
+    const isLocked=!completed&&!prevDone;
+    const wrap=document.createElement('div');
+    wrap.className='node-wrap-inner';
+    wrap.style.marginLeft=zig[i%zig.length]+'px';
+    let cls='lesson-node';
+    if(completed)cls+=' completed';
+    else if(node.locked24)cls+=' locked-24';
+    else if(isActive)cls+=' active-node-ls';
+    else if(isLocked)cls+=' locked';
+    const btn=document.createElement('div');
+    btn.className=cls;
+    btn.innerHTML=node.icon+'<div class="node-tooltip">'+node.label+(node.locked24?' (unlocks in 24h)':'')+'</div>';
+    btn.onclick=()=>{
+      if(isLocked){alert('🔒 Complete the previous lesson first!');return;}
+      if(node.locked24&&!completed){alert('🔒 This revision unlocks 24 hours after you complete the lesson!');return;}
+      startLesson(node);
+    };
+    const lbl=document.createElement('div');
+    lbl.className='node-label';lbl.textContent=node.label;
+    wrap.appendChild(btn);wrap.appendChild(lbl);c.appendChild(wrap);
+  });
+}
+function toggleDropdown(){document.getElementById('d-dropdown').classList.toggle('open');}
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('d-dropdown');
+  const btn=document.getElementById('d-avbtn');
+  if(dd&&btn&&!dd.contains(e.target)&&!btn.contains(e.target))dd.classList.remove('open');
+});
+
+// ═══════════════════════════════════════════════════
+// LESSON ENGINE
+// ═══════════════════════════════════════════════════
+const allLessons={
+  'uz-1-1':{type:'theory',slides:[
+    {type:'theory',tag:'Theory',headline:'Welcome to Ancient Sogdiana! 🏺',image:'🏺',body:'Long before Uzbekistan existed as a country, this land was home to one of the ancient world\'s great civilizations: <strong>Sogdiana</strong>. Named after the Sogdians — a people of Iranian origin — this region flourished between the 6th century BCE and the 8th century CE. Their heartland lay between the Amu Darya and Syr Darya rivers, with magnificent Samarkand and Bukhara as their cultural centers.',note:'"Sogdiana" comes from Old Persian "Suguda" — meaning <em>the land of strength</em>! 💪'},
+    {type:'theory',tag:'Theory',headline:'Master Merchants of the Ancient World 🐪',image:'🐪',body:'The Sogdians were master <strong>merchants and diplomats</strong>. They dominated trade across the ancient world centuries before the term "Silk Road" was invented. Sogdian merchants traveled from China to Byzantium, carrying silk, spices, gold, and ideas. Their language became the <strong>lingua franca of trade</strong> — like English is today.',terms:[{word:'Lingua franca',def:'A language used as a common tongue between speakers of different native languages'},{word:'Samarkand',def:'Ancient Sogdian city, one of the oldest continuously inhabited cities in Central Asia'},{word:'Merchant',def:'A person who trades goods, especially one who travels long distances'}]},
+    {type:'theory',tag:'Theory',headline:'Sogdian Art & Culture 🎨',image:'🎨',body:'The Sogdians were celebrated <strong>artists and builders</strong>. Their palace murals discovered across Uzbekistan show vivid scenes of banquets, hunting, and mythical creatures. The city of Penjikent is often called the <strong>"Pompeii of Central Asia"</strong> — its ruins preserve extraordinary Sogdian art that blended Persian, Greek, Indian, and Chinese influences.',note:'The Sogdians invented an alphabet that influenced Arabic, Hebrew, and even Mongolian scripts! ✍️'},
+  ]},
+  'uz-1-2':{type:'theory',slides:[
+    {type:'theory',tag:'Theory',headline:'The Persian Empire Arrives ⚔️',image:'👑',body:'Around 530 BCE, the mighty <strong>Achaemenid Persian Empire</strong> — led by Cyrus the Great — swept through Central Asia and conquered Sogdiana. This was one of the largest empires the world had ever seen, stretching from Greece to India. Under Persian rule, Sogdiana became a <strong>satrapy</strong> (province) called "Suguda."',note:'Cyrus the Great was famous for his tolerance — he allowed conquered peoples to keep their religions and customs! 🕊️'},
+  ]},
+  'uz-1-3':{type:'theory',slides:[
+    {type:'theory',tag:'Theory',headline:'Alexander the Great 🗡️',image:'⚔️',body:'In 329 BCE, <strong>Alexander the Great</strong> of Macedon swept through Sogdiana after defeating the Persian Empire. He founded the city of Alexandria Eschate ("Alexandria the Farthest") — modern Khujand — on the very edge of the known world. Local Sogdian nobles resisted fiercely, and Alexander met his future wife <strong>Roxana</strong>, daughter of a Sogdian chieftain, here.',note:'Alexander was so impressed by Sogdian resistance that he decided diplomacy worked better than conquest — he married into the local nobility! 🤝'},
+  ]},
+  quiz:{type:'quiz',slides:[
+    {type:'quiz',tag:'Quiz',question:'What were the two most important cities in ancient Sogdiana?',options:[{letter:'A',text:'Samarkand and Bukhara',correct:true},{letter:'B',text:'Baghdad and Damascus'},{letter:'C',text:'Kabul and Herat'},{letter:'D',text:'Tehran and Tabriz'}],expl:'Correct! Samarkand and Bukhara were the heart of Sogdian civilization. 🏙️'},
+    {type:'quiz',tag:'Quiz',question:'The Sogdian language served as what on the Silk Road?',options:[{letter:'A',text:'A secret military code'},{letter:'B',text:'A religious prayer script'},{letter:'C',text:'A common trade language',correct:true},{letter:'D',text:'A navigation system'}],expl:'Yes! Sogdian was the Silk Road\'s common language, like English today. 🌏'},
+    {type:'quiz',tag:'Quiz',question:'Which Persian ruler conquered Sogdiana around 530 BCE?',options:[{letter:'A',text:'Darius the Great'},{letter:'B',text:'Xerxes I'},{letter:'C',text:'Cyrus the Great',correct:true},{letter:'D',text:'Artaxerxes II'}],expl:'Correct! Cyrus the Great was famous for his tolerant rule. ⚔️'},
+  ]},
+  workbook:{type:'workbook',slides:[
+    {type:'workbook',tag:'Workbook',prompt:'✍️ The Sogdians were master traders. What do YOU think made them so successful?',hint:'Think about: language skills, geography, diplomacy, or what products they traded...'},
+    {type:'workbook',tag:'Workbook',prompt:'🗺️ Imagine you are a Sogdian merchant in 500 BCE. Describe your journey from Samarkand to China.',hint:'What would you carry? What dangers would you face? Who would you meet?'},
+  ]},
+};
+
+let lsSlide=0, lsSlides=[], lsHearts=3, lsCorrect=0, lsTotalQ=0, lsNode=null;
+
+function startLesson(node){
+  lsNode=node;lsSlide=0;lsHearts=3;lsCorrect=0;lsTotalQ=0;
+  const key=node.type==='quiz'?'quiz':node.type==='workbook'?'workbook':node.id;
+  const data=allLessons[key]||allLessons['uz-1-1'];
+  lsSlides=data.slides;
+  goTo('page-lesson');
+  setTimeout(()=>{lsRender(lsSlides[0]);lsUpdateProg();lsUpdateHearts();},100);
+}
+function lsUpdateProg(){const p=(lsSlide/lsSlides.length)*100;const b=document.getElementById('ls-prog');if(b)b.style.width=p+'%';}
+function lsUpdateHearts(){const h=document.getElementById('ls-hearts');if(h)h.textContent='❤️'.repeat(lsHearts)+'🖤'.repeat(3-lsHearts);}
+function lsRender(slide){
+  const w=document.getElementById('ls-wrapper');
+  const f=document.getElementById('ls-footer');
+  if(f){f.classList.remove('show');document.getElementById('ls-feedback').textContent='';document.getElementById('ls-cont').className='continue-btn';}
+  if(!slide){lsShowComplete();return;}
+  if(slide.type==='theory'){
+    const terms=slide.terms?`<div class="key-terms"><h4>📖 Key Terms</h4>${slide.terms.map(t=>`<div class="term-row"><div class="term-word">${t.word}</div><div class="term-def">${t.def}</div></div>`).join('')}</div>`:'';
+    const note=slide.note?`<div class="scrapbook-note">${slide.note}</div>`:'';
+    w.innerHTML=`<div class="theory-card"><span class="theory-tag tag-theory">📖 ${slide.tag}</span><div class="theory-image">${slide.image}</div><h2 class="theory-headline">${slide.headline}</h2><p class="theory-body">${slide.body}</p>${terms}${note}</div>`;
+    f.classList.add('show');document.getElementById('ls-cont').textContent='Continue →';
+  } else if(slide.type==='quiz'){
+    lsTotalQ++;
+    w.innerHTML=`<div class="theory-card"><span class="theory-tag tag-quiz">🎯 ${slide.tag}</span><div class="quiz-question">${slide.question}</div><div class="quiz-options">${slide.options.map(o=>`<div class="quiz-option" onclick="lsCheck(this,${!!o.correct},'${(slide.expl||'').replace(/'/g,"\\'")}')" data-correct="${!!o.correct}"><div class="option-letter">${o.letter}</div>${o.text}</div>`).join('')}</div></div>`;
+  } else if(slide.type==='workbook'){
+    w.innerHTML=`<div class="theory-card"><span class="theory-tag tag-workbook">✍️ ${slide.tag}</span><div class="workbook-prompt">${slide.prompt}</div><div class="workbook-lines"><textarea class="workbook-textarea" placeholder="Write your answer here..."></textarea></div><p class="workbook-hint">💡 ${slide.hint}</p></div>`;
+    f.classList.add('show');document.getElementById('ls-cont').textContent='Submit & Continue →';
+  }
+}
+function lsCheck(el,correct,expl){
+  document.querySelectorAll('.quiz-option').forEach(o=>{o.classList.add('disabled');o.onclick=null;});
+  const f=document.getElementById('ls-footer');
+  const fb=document.getElementById('ls-feedback');
+  const btn=document.getElementById('ls-cont');
+  f.classList.add('show');
+  if(correct){
+    el.classList.add('correct');lsCorrect++;
+    fb.innerHTML=`<span class="feedback-correct">✅ ${expl||'Correct!'}</span>`;
+    btn.className='continue-btn';
+  } else {
+    el.classList.add('wrong');lsHearts=Math.max(0,lsHearts-1);lsUpdateHearts();
+    document.querySelectorAll('.quiz-option').forEach(o=>{if(o.dataset.correct==='true')o.classList.add('correct');});
+    fb.innerHTML=`<span class="feedback-wrong">❌ Not quite! ${expl||''}</span>`;
+    btn.className='continue-btn wrong-btn';
+  }
+  btn.textContent='Continue →';
+}
+function lsNext(){
+  lsSlide++;lsUpdateProg();
+  if(lsSlide>=lsSlides.length){lsShowComplete();}
+  else{lsRender(lsSlides[lsSlide]);window.scrollTo(0,0);}
+}
+function lsShowComplete(){
+  const u=JSON.parse(localStorage.getItem('epochUser'))||{coins:0,completedLessons:[]};
+  if(!u.completedLessons)u.completedLessons=[];
+  const id=lsNode?.id||'uz-1-1';
+  if(!u.completedLessons.includes(id))u.completedLessons.push(id);
+  const coins=lsNode?.type==='quiz'?lsCorrect*10:lsNode?.type==='workbook'?15:20;
+  u.coins=(u.coins||0)+coins;
+  localStorage.setItem('epochUser',JSON.stringify(u));
+  const acc=lsTotalQ>0?Math.round(lsCorrect/lsTotalQ*100)+'%':'100%';
+  document.getElementById('ls-wrapper').innerHTML=`
+    <div class="complete-screen">
+      <div class="complete-trophy">🏆</div>
+      <h2 class="complete-title">Lesson Complete!</h2>
+      <p style="color:#8a6a3a;margin-bottom:14px;font-size:15px">Great work, ${u.name||'Explorer'}! You're making history! 🌟</p>
+      <div class="complete-stats">
+        ${lsTotalQ>0?`<div class="complete-stat"><div class="stat-num">${acc}</div><div class="stat-lbl">Accuracy</div></div>`:''}
+        <div class="complete-stat"><div class="stat-num">${lsSlides.length}</div><div class="stat-lbl">Slides</div></div>
+        <div class="complete-stat"><div class="stat-num">${lsHearts}/3</div><div class="stat-lbl">Hearts left</div></div>
+      </div>
+      <div class="coins-earned">💰 +${coins} coins earned!</div>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-primary" style="font-size:17px;padding:14px 28px" onclick="goTo('page-dashboard')">Back to Path 🗺️</button>
+        <button class="btn-secondary" style="font-size:17px;padding:14px 28px" onclick="goTo('page-dashboard')">Next Lesson →</button>
+      </div>
+    </div>`;
+  document.getElementById('ls-footer').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+initLanding();
+</script>
+</body>
+</html>

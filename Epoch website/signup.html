@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Epoch — Get Started</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/auth.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <div class="auth-wrapper">
+    <div class="auth-stickers">
+      <span style="top:5%;left:5%">🗺️</span>
+      <span style="top:15%;right:8%">🏛️</span>
+      <span style="bottom:20%;left:3%">📜</span>
+      <span style="bottom:8%;right:5%">🌍</span>
+    </div>
+
+    <div class="auth-card">
+      <a href="../index.html" class="back-link">← Back</a>
+      <div class="auth-logo">⏳ <span>Epoch</span></div>
+      <h1 class="auth-title">Join the adventure!</h1>
+      <p class="auth-sub">Your journey through history starts here 🚀</p>
+
+      <!-- PROGRESS STEPS -->
+      <div class="signup-steps">
+        <div class="sig-step active" id="step-dot-1">1</div>
+        <div class="sig-line"></div>
+        <div class="sig-step" id="step-dot-2">2</div>
+        <div class="sig-line"></div>
+        <div class="sig-step" id="step-dot-3">3</div>
+      </div>
+
+      <!-- STEP 1: Account -->
+      <div class="step-panel active" id="step1">
+        <h2 class="step-title">Create your account</h2>
+        <div class="form-group">
+          <label>Your name</label>
+          <input type="text" id="name" placeholder="e.g. Aisha, Kenji, Mateo..." class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="your@email.com" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Make it strong!" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <select id="age" class="form-input">
+            <option value="">Select your age</option>
+            <option>12</option><option>13</option><option>14</option>
+            <option>15</option><option>16</option><option>17</option><option>18</option>
+          </select>
+        </div>
+        <button class="btn-primary step-btn" onclick="nextStep(1)">Next Step →</button>
+      </div>
+
+      <!-- STEP 2: Choose path -->
+      <div class="step-panel" id="step2">
+        <h2 class="step-title">Choose your history path 🌍</h2>
+
+        <div class="form-group">
+          <label>Continent</label>
+          <select id="continent" class="form-input" onchange="updateCountries()">
+            <option value="">Choose continent...</option>
+            <option value="asia">Asia</option>
+            <option value="africa">Africa</option>
+            <option value="europe">Europe</option>
+            <option value="americas">The Americas</option>
+            <option value="oceania">Oceania</option>
+            <option value="middleeast">Middle East</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Country</label>
+          <select id="country" class="form-input" onchange="updateRegions()">
+            <option value="">Choose country...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Region / Province</label>
+          <select id="region" class="form-input">
+            <option value="">Choose region...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>What interests you most?</label>
+          <div class="interest-chips" id="interests">
+            <div class="chip" onclick="toggleChip(this)">🏛️ Ancient History</div>
+            <div class="chip" onclick="toggleChip(this)">⚔️ Wars & Conflicts</div>
+            <div class="chip" onclick="toggleChip(this)">🕌 Religion & Culture</div>
+            <div class="chip" onclick="toggleChip(this)">👑 Rulers & Dynasties</div>
+            <div class="chip" onclick="toggleChip(this)">🌾 Daily Life</div>
+            <div class="chip" onclick="toggleChip(this)">🎭 Art & Language</div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn-primary" onclick="nextStep(2)">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Avatar -->
+      <div class="step-panel" id="step3">
+        <h2 class="step-title">Pick your explorer avatar! 🧭</h2>
+        <div class="avatar-grid" id="avatar-grid">
+          <div class="avatar-opt selected" onclick="selectAvatar(this)" data-id="1">🧑‍🏫</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="2">👸</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="3">🧙</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="4">🦸</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="5">🧝</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="6">🧜</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="7">🧚</div>
+          <div class="avatar-opt" onclick="selectAvatar(this)" data-id="8">🦅</div>
+        </div>
+        <div class="avatar-display" id="avatar-display">🧑‍🏫</div>
+        <p class="avatar-hint">You'll earn coins to customize your look!</p>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn-primary" onclick="completeSignup()">Start Learning! 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+  </div>
+
+  <script>
+  const countriesByContinent = {
+    asia: ['Uzbekistan','Kazakhstan','India','China','Japan','South Korea','Vietnam','Philippines','Indonesia','Thailand','Nepal','Sri Lanka','Mongolia','Kyrgyzstan','Tajikistan'],
+    africa: ['Nigeria','Egypt','Kenya','Ethiopia','Ghana','South Africa','Morocco','Tanzania','Uganda','Rwanda','Senegal','Ivory Coast','Cameroon','Zimbabwe','Mozambique'],
+    europe: ['Russia','Ukraine','Poland','Germany','France','Spain','Italy','Greece','Romania','Hungary','Czech Republic','Serbia','Bulgaria','Croatia','Portugal'],
+    americas: ['Brazil','Mexico','Argentina','Colombia','Peru','Chile','Venezuela','Ecuador','Bolivia','Cuba','Haiti','Jamaica','Guatemala','Honduras','Uruguay'],
+    oceania: ['Australia','New Zealand','Papua New Guinea','Fiji','Samoa','Tonga','Vanuatu','Palau','Marshall Islands','Kiribati'],
+    middleeast: ['Turkey','Iran','Saudi Arabia','Iraq','Syria','Jordan','Lebanon','Yemen','Oman','UAE','Qatar','Kuwait','Bahrain','Israel','Palestine']
+  };
+  const regionsByCountry = {
+    'Uzbekistan': ['Tashkent','Samarkand','Bukhara','Fergana','Namangan','Andijan','Navoiy','Kashkadarya','Surkhandarya','Khorezm'],
+    'Kazakhstan': ['Almaty','Nur-Sultan','Shymkent','Aktobe','Atyrau','Karaganda','Pavlodar','East Kazakhstan','West Kazakhstan','Kostanay'],
+    'India': ['Maharashtra','Tamil Nadu','Rajasthan','Gujarat','West Bengal','Uttar Pradesh','Kerala','Karnataka','Madhya Pradesh','Punjab'],
+    'Nigeria': ['Lagos','Kano','Abuja FCT','Rivers','Oyo','Katsina','Borno','Delta','Kaduna','Anambra'],
+    'Japan': ['Tokyo','Osaka','Kyoto','Hokkaido','Okinawa','Aichi','Fukuoka','Hyogo','Kanagawa','Saitama'],
+    'Brazil': ['São Paulo','Rio de Janeiro','Bahia','Minas Gerais','Paraná','Rio Grande do Sul','Pernambuco','Ceará','Amazonas','Pará'],
+    'Egypt': ['Cairo','Alexandria','Giza','Luxor','Aswan','Sinai','Mansoura','Tanta','Asyut','Suez'],
+    'Russia': ['Moscow','Saint Petersburg','Siberia','Tatarstan','Chechen Republic','Dagestan','Bashkortostan','Yakutia','Ural Region','Volga Region'],
+    'Turkey': ['Istanbul','Ankara','Izmir','Antalya','Bursa','Cappadocia','Black Sea Region','Eastern Anatolia','Aegean','Marmara'],
+    'Mexico': ['Mexico City','Jalisco','Oaxaca','Yucatán','Chiapas','Veracruz','Guanajuato','Puebla','Guerrero','Michoacán'],
+    'default': ['North Region','South Region','East Region','West Region','Central Region','Coastal Region','Highland Region','Valley Region']
+  };
+
+  function updateCountries() {
+    const cont = document.getElementById('continent').value;
+    const sel = document.getElementById('country');
+    sel.innerHTML = '<option value="">Choose country...</option>';
+    document.getElementById('region').innerHTML = '<option value="">Choose region...</option>';
+    if (!cont) return;
+    (countriesByContinent[cont]||[]).forEach(c => {
+      sel.innerHTML += `<option value="${c}">${c}</option>`;
+    });
+  }
+  function updateRegions() {
+    const country = document.getElementById('country').value;
+    const sel = document.getElementById('region');
+    sel.innerHTML = '<option value="">Choose region...</option>';
+    const regions = regionsByCountry[country] || regionsByCountry['default'];
+    regions.forEach(r => {
+      sel.innerHTML += `<option value="${r}">${r}</option>`;
+    });
+  }
+
+  let currentStep = 1;
+  function nextStep(from) {
+    document.getElementById(`step${from}`).classList.remove('active');
+    document.getElementById(`step-dot-${from}`).classList.remove('active');
+    document.getElementById(`step-dot-${from}`).classList.add('done');
+    currentStep = from + 1;
+    document.getElementById(`step${currentStep}`).classList.add('active');
+    document.getElementById(`step-dot-${currentStep}`).classList.add('active');
+  }
+  function prevStep(from) {
+    document.getElementById(`step${from}`).classList.remove('active');
+    document.getElementById(`step-dot-${from}`).classList.remove('active');
+    currentStep = from - 1;
+    document.getElementById(`step${currentStep}`).classList.add('active');
+    document.getElementById(`step-dot-${currentStep}`).classList.remove('done');
+    document.getElementById(`step-dot-${currentStep}`).classList.add('active');
+  }
+
+  function toggleChip(el) { el.classList.toggle('active'); }
+  function selectAvatar(el) {
+    document.querySelectorAll('.avatar-opt').forEach(a => a.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('avatar-display').textContent = el.textContent;
+  }
+
+  function completeSignup() {
+    const userData = {
+      name: document.getElementById('name').value || 'Explorer',
+      continent: document.getElementById('continent').value,
+      country: document.getElementById('country').value,
+      region: document.getElementById('region').value,
+      avatar: document.getElementById('avatar-display').textContent,
+      coins: 0,
+      streak: 0,
+      completedLessons: []
+    };
+    localStorage.setItem('epochUser', JSON.stringify(userData));
+    window.location.href = 'dashboard.html';
+  }
+  </script>
+</body>
+</html>

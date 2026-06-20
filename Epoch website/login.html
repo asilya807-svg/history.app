@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Epoch — Log In</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/auth.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <div class="auth-stickers">
+    <span style="top:5%;left:5%">⚔️</span>
+    <span style="top:10%;right:8%">🏰</span>
+    <span style="bottom:15%;left:3%">🌙</span>
+    <span style="bottom:8%;right:5%">⭐</span>
+  </div>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <a href="../index.html" class="back-link">← Back to home</a>
+      <div class="auth-logo">⏳ <span>Epoch</span></div>
+      <h1 class="auth-title">Welcome back! 👋</h1>
+      <p class="auth-sub">Your history adventure awaits</p>
+
+      <div class="login-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="your@email.com" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-pwd" placeholder="••••••••" class="form-input"/>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <button class="btn-primary login-btn" onclick="doLogin()">Log In 🚀</button>
+        <div class="divider">or</div>
+        <button class="btn-secondary login-btn" onclick="demoLogin()">Try Demo Account 👀</button>
+      </div>
+    </div>
+    <p class="auth-switch">New here? <a href="signup.html">Create an account</a></p>
+  </div>
+
+  <script>
+  function doLogin() {
+    const userData = localStorage.getItem('epochUser');
+    if (userData) {
+      window.location.href = 'dashboard.html';
+    } else {
+      demoLogin();
+    }
+  }
+  function demoLogin() {
+    const demo = {
+      name: 'Explorer',
+      country: 'Uzbekistan',
+      continent: 'asia',
+      region: 'Samarkand',
+      avatar: '🧑‍🏫',
+      coins: 340,
+      streak: 5,
+      completedLessons: ['uz-1-1', 'uz-1-2']
+    };
+    localStorage.setItem('epochUser', JSON.stringify(demo));
+    window.location.href = 'dashboard.html';
+  }
+  </script>
+</body>
+</html>

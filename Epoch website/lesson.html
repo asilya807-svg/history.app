@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Epoch — Lesson</title>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/lesson.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="lesson-body">
+
+  <!-- TOP BAR -->
+  <div class="lesson-topbar">
+    <a href="dashboard.html" class="back-btn">✕</a>
+    <div class="lesson-progress-wrap">
+      <div class="lesson-progress-bar" id="lesson-progress" style="width:0%"></div>
+    </div>
+    <div class="lesson-hearts" id="lesson-hearts">❤️❤️❤️</div>
+  </div>
+
+  <!-- LESSON CONTENT (dynamically loaded) -->
+  <div class="lesson-wrapper" id="lesson-wrapper">
+    <div class="loading-spinner">⏳ Loading lesson...</div>
+  </div>
+
+  <!-- CONTINUE BUTTON -->
+  <div class="lesson-footer" id="lesson-footer" style="display:none">
+    <div class="answer-feedback" id="answer-feedback"></div>
+    <button class="continue-btn" id="continue-btn" onclick="nextSlide()">Continue →</button>
+  </div>
+
+  <script src="../js/lesson.js"></script>
+</body>
+</html>
